@@ -42,4 +42,45 @@ class PersonDao{
     await db.update("persons", data, where: "person_id = ?", whereArgs: [person_id]);
   }
 
+  Future<int> recordControl(String person_name) async {
+    var db = await DatabaseSupport.databaseAccess();
+
+    List<Map<String,dynamic>> maps = await db.rawQuery("SELECT count(*) AS result FROM persons WHERE person_name='$person_name'");
+
+    return maps[0]["result"];
+  }
+
+  Future<Persons> selectPerson(int person_id) async {
+    var db = await DatabaseSupport.databaseAccess();
+
+    List<Map<String,dynamic>> maps = await db.rawQuery("SELECT * FROM persons WHERE person_id=$person_id");
+    var row = maps[0];
+
+    return Persons(row["person_id"], row["person_name"], row["person_age"]);
+  }
+
+  Future<List<Persons>> searchPerson(String word) async{
+    var db = await DatabaseSupport.databaseAccess();
+
+    List<Map<String,dynamic>> maps = await db.rawQuery("SELECT * FROM persons WHERE person_name LIKE '%$word%'");
+
+    return List.generate(maps.length, (i) {
+      var row = maps[i];
+
+      return Persons(row["person_id"], row["person_name"], row["person_age"]);
+    });
+  }
+
+  Future<List> selectRandom2Persons() async{
+    var db = await DatabaseSupport.databaseAccess();
+
+    List<Map<String,dynamic>> maps = await db.rawQuery("SELECT * FROM persons ORDER BY RANDOM() LIMIT 2");
+
+    return List.generate(maps.length, (i){
+      var row = maps[i];
+
+      return Persons(row["person_id"], row["person_name"], row["person_age"]);
+    });
+  }
+
 }

@@ -58,13 +58,52 @@ class _MyHomePageState extends State<MyHomePage> {
     await PersonDao().updatePerson(4, "New Ece", 99);
   }
 
+  Future<void> recordControl() async{
+    int result = await PersonDao().recordControl("ahmet");
+    print("Ahmet Count: $result");
+  }
+
+  Future<void> select() async{
+    var person = await PersonDao().selectPerson(1);
+    print("*****Select Person******");
+    print("Person id: ${person.person_id}");
+    print("Person name: ${person.person_name}");
+    print("Person age: ${person.person_age}");
+  }
+
+  Future<void> searchPersons() async{
+    var list = await PersonDao().searchPerson("et");
+
+    for(Persons p in list){
+      print("*******************");
+      print("Person id: ${p.person_id}" );
+      print("Person name: ${p.person_name}" );
+      print("Person age: ${p.person_age}" );
+    }
+  }
+
+  Future<void> selectRandom2Persons() async{
+    var list = await PersonDao().selectRandom2Persons();
+
+    for(Persons p in list){
+      print("*********RANDOM PERSONS**********");
+      print("Person id: ${p.person_id}" );
+      print("Person name: ${p.person_name}" );
+      print("Person age: ${p.person_age}" );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
 
     //add();
     //delete();
-    update();
+    //update();
+    //recordControl();
+    //select();
+    //searchPersons();
+    selectRandom2Persons();
     showPersons();
   }
 
